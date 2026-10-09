@@ -1,0 +1,257 @@
+:root {
+  color-scheme: dark;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --sans: ui-sans-serif, -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #0b0b0c;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  display: grid;
+  place-items: center;
+}
+
+/* The stage: 16:9 by default, as large as the window allows. */
+#stage {
+  position: relative;
+  height: min(100dvh, 100vw * 9 / 16);
+  aspect-ratio: 16 / 9;
+  /* One design pixel (the stage is drawn 1920 x 1080), so type scales with it. */
+  --u: calc(min(100dvh, 100vw * 9 / 16) / 1080);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+}
+
+#stage[data-aspect='portrait'] {
+  height: min(100dvh, 100vw * 16 / 9);
+  aspect-ratio: 9 / 16;
+  --u: calc(min(100dvh, 100vw * 16 / 9) / 1920);
+}
+
+#view {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#hint {
+  position: absolute;
+  left: calc(64 * var(--u));
+  bottom: calc(72 * var(--u));
+  width: calc(640 * var(--u));
+  padding: calc(44 * var(--u)) calc(48 * var(--u)) calc(40 * var(--u));
+  color: #26221d;
+  background: rgba(247, 242, 232, 0.82);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.1);
+  border-radius: calc(6 * var(--u));
+  box-shadow:
+    0 0 0 1px rgba(38, 34, 29, 0.08),
+    0 calc(24 * var(--u)) calc(60 * var(--u)) rgba(20, 16, 12, 0.22);
+  font-family: var(--serif);
+  font-size: calc(29 * var(--u));
+  line-height: 1.45;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+#hint[hidden] {
+  display: block;
+  opacity: 0;
+  transform: translateY(calc(12 * var(--u)));
+  pointer-events: none;
+}
+
+#hint h1 {
+  margin: 0;
+  font-size: calc(58 * var(--u));
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+#hint .palette {
+  margin: calc(14 * var(--u)) 0 calc(30 * var(--u));
+  font-family: var(--sans);
+  font-size: calc(19 * var(--u));
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(38, 34, 29, 0.55);
+}
+
+#hint dl {
+  margin: 0;
+}
+
+#hint dl div {
+  display: flex;
+  align-items: baseline;
+  gap: calc(22 * var(--u));
+}
+
+#hint dt {
+  flex: none;
+}
+
+#hint dd {
+  margin: 0;
+}
+
+.gestures {
+  padding: calc(26 * var(--u)) 0;
+  border-top: 1px solid rgba(38, 34, 29, 0.16);
+  border-bottom: 1px solid rgba(38, 34, 29, 0.16);
+}
+
+.gestures dt {
+  width: calc(170 * var(--u));
+  font-style: italic;
+}
+
+.gestures dd {
+  color: rgba(38, 34, 29, 0.72);
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(6 * var(--u)) calc(30 * var(--u));
+  padding-top: calc(26 * var(--u));
+  font-family: var(--sans);
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.04em;
+}
+
+.keys dt {
+  min-width: calc(40 * var(--u));
+  padding: 0 calc(6 * var(--u));
+  height: calc(40 * var(--u));
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(38, 34, 29, 0.3);
+  border-radius: calc(5 * var(--u));
+  font-weight: 600;
+  font-size: calc(19 * var(--u));
+}
+
+.keys dd {
+  color: rgba(38, 34, 29, 0.72);
+}
+
+.note {
+  margin: calc(24 * var(--u)) 0 0;
+  font-size: calc(22 * var(--u));
+  font-style: italic;
+  color: rgba(38, 34, 29, 0.6);
+}
+
+.note:empty {
+  display: none;
+}
+
+/* Recording light: part of the page, not of the recorded canvas. */
+#rec {
+  position: absolute;
+  top: calc(50 * var(--u));
+  right: calc(96 * var(--u));
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--u));
+  font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: calc(20 * var(--u));
+  letter-spacing: 0.08em;
+  color: #fbf7f0;
+  text-shadow:
+    0 0 calc(6 * var(--u)) rgba(10, 9, 8, 0.75),
+    0 0 1px rgba(10, 9, 8, 0.9);
+  pointer-events: none;
+}
+
+#rec[hidden] {
+  display: none;
+}
+
+#rec i {
+  display: none;
+  width: calc(15 * var(--u));
+  height: calc(15 * var(--u));
+  border-radius: 50%;
+  background: #d8362a;
+  box-shadow: 0 0 0 1px rgba(251, 247, 240, 0.7);
+  animation: rec-pulse 1.4s ease-in-out infinite;
+}
+
+#rec.live i {
+  display: block;
+}
+
+@keyframes rec-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+#whisper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(64 * var(--u));
+  margin: 0;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: calc(21 * var(--u));
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(38, 34, 29, 0.5);
+  mix-blend-mode: multiply;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+
+#whisper[hidden] {
+  display: block;
+  opacity: 0;
+}
+
+#whisper kbd {
+  font: inherit;
+  font-weight: 700;
+}
+
+#failure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 12%;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: calc(34 * var(--u));
+  line-height: 1.5;
+  color: #d8d2c6;
+  background: #141312;
+}
+
+#failure[hidden] {
+  display: none;
+}

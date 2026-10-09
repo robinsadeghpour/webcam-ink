@@ -1,0 +1,33 @@
+{
+  "name": "webcam-ink",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Ink flows from your fingertips into water, over your own webcam picture, with the hand tracking drawn on top.",
+  "license": "MIT",
+  "author": "Robin Sadeghpour-Faraj",
+  "homepage": "https://native.express/lab/ink",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robinsadeghpour/webcam-ink.git"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "assets": "node tools/copy-assets.mjs",
+    "predev": "node tools/copy-assets.mjs",
+    "prebuild": "node tools/copy-assets.mjs",
+    "dev": "vite --port 5181 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 5181 --strictPort",
+    "test": "node tools/audio-test.ts && node tools/clap-test.ts && node tools/gesture-test.ts"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}

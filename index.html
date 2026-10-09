@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // When the page is served at a path with no trailing slash (/lab/ink
+      // rather than /lab/ink/), relative URLs would resolve one level too
+      // high. Give the document a base that ends in a slash before anything
+      // else is requested.
+      (function () {
+        var path = location.pathname;
+        if (!/\/$|\.html?$/.test(path)) {
+          var base = document.createElement('base');
+          base.href = path + '/';
+          document.head.insertBefore(base, document.head.firstChild);
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0b0c" />
+    <title>Ink</title>
+    <link rel="icon" href="data:," />
+    <style>
+      /* Before the stylesheet arrives: no white flash. */
+      html,
+      body {
+        margin: 0;
+        background: #0b0b0c;
+      }
+    </style>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main id="stage">
+      <canvas id="view" aria-label="Ink flowing in water"></canvas>
+
+      <aside id="hint" hidden>
+        <h1>Ink</h1>
+        <p class="palette" id="palette-name"></p>
+        <dl class="gestures">
+          <div><dt>Point</dt><dd>draw with straight fingers</dd></div>
+          <div><dt>Pinch</dt><dd>drop ink; hold to charge</dd></div>
+          <div><dt>Open hand</dt><dd>stir the water</dd></div>
+          <div><dt>Snap</dt><dd>switch paper and camera</dd></div>
+          <div><dt>Clap twice</dt><dd>switch paper and camera</dd></div>
+        </dl>
+        <dl class="keys">
+          <div><dt>P</dt><dd>palette</dd></div>
+          <div><dt>B</dt><dd>paper / camera</dd></div>
+          <div><dt>T</dt><dd>tracking marks</dd></div>
+          <div><dt>C</dt><dd>clear</dd></div>
+          <div><dt>R</dt><dd>record 16:9</dd></div>
+          <div><dt>&#8679;R</dt><dd>record as a reel</dd></div>
+          <div><dt>A</dt><dd>wide / tall stage</dd></div>
+          <div><dt>F</dt><dd>fullscreen</dd></div>
+          <div><dt>H</dt><dd>hide</dd></div>
+        </dl>
+        <p class="note" id="note">No camera? Move the pointer to draw, click for a drop, hold Shift for the second ink.</p>
+      </aside>
+
+      <p id="rec" hidden><i></i><span id="rec-text"></span></p>
+      <p id="whisper" hidden>Press <kbd>H</kbd> for help</p>
+      <p id="failure" hidden></p>
+    </main>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
